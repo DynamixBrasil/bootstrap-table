@@ -1,6 +1,11 @@
 ChangeLog
 ---------
 
+=======
+### 1.11.0-hotfix
+
+- fix(js): fix #2385, checkbox render bug with formatter
+
 ### 1.11.0
 
 - fix(js): fix cardVisible doesn't work bug

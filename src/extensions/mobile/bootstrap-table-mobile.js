@@ -81,13 +81,15 @@
         minHeight: undefined,
         heightThreshold: 100, // just slightly larger than mobile chrome's auto-hiding toolbar
         checkOnInit: true,
-        columnsHidden: []
+        columnsHidden: [],
+        resizeDelay: 200
     });
 
     var BootstrapTable = $.fn.bootstrapTable.Constructor,
         _init = BootstrapTable.prototype.init;
 
     BootstrapTable.prototype.init = function () {
+
         _init.apply(this, Array.prototype.slice.apply(arguments));
 
         if (!this.options.mobileResponsive) {
@@ -103,29 +105,35 @@
             this.options.minWidth = 100;
         }
 
-        var that = this,
-            old = {
-                width: $(window).width(),
-                height: $(window).height()
-            };
+        var that = this;
+        var mContainer = $(that.$container);
+        var old = {
+            width: mContainer.width(),
+            height: mContainer.height()
+        };
 
         $(window).on('resize orientationchange',debounce(function (evt) {
+
             // reset view if height has only changed by at least the threshold.
-            var height = $(this).height(),
-                width = $(this).width();
+            var height = mContainer.height(),
+                width = mContainer.width();
 
-            if (Math.abs(old.height - height) > that.options.heightThreshold || old.width != width) {
-                changeView(that, width, height);
-                old = {
-                    width: width,
-                    height: height
-                };
+            if(mContainer.is(':visible'))
+            {
+                if (Math.abs(old.height - height) > that.options.heightThreshold || old.width != width) {
+                    changeView(that, width, height);
+                    old = {
+                        width: width,
+                        height: height
+                    };
+                }
             }
-        },200));
 
-        if (this.options.checkOnInit) {
-            var height = $(window).height(),
-                width = $(window).width();
+        },this.options.resizeDelay));
+
+        if (this.options.checkOnInit && mContainer.is(':visible')) {
+            var height = mContainer.height(),
+                width = mContainer.width();
             changeView(this, width, height);
             old = {
                 width: width,

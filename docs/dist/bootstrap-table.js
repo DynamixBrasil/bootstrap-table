@@ -1657,7 +1657,8 @@
 
             $.each(this.header.fields, function (j, field) {
                 var text = '',
-                    value = getItemField(item, field, that.options.escape),
+                    value_ = getItemField(item, field, that.options.escape),
+                    value = '',
                     type = '',
                     cellStyle = {},
                     id_ = '',
@@ -1668,7 +1669,7 @@
                     title_ = '',
                     column = that.columns[j];
 
-                if (that.fromHtml && typeof value === 'undefined') {
+                if (that.fromHtml && typeof value_ === 'undefined') {
                     return;
                 }
 
@@ -1699,7 +1700,7 @@
                     title_ = sprintf(' title="%s"', item['_' + field + '_title']);
                 }
                 cellStyle = calculateObjectValue(that.header,
-                    that.header.cellStyles[j], [value, item, i, field], cellStyle);
+                    that.header.cellStyles[j], [value_, item, i, field], cellStyle);
                 if (cellStyle.classes) {
                     class_ = sprintf(' class="%s"', cellStyle.classes);
                 }
@@ -1712,7 +1713,7 @@
                 }
 
                 value = calculateObjectValue(column,
-                    that.header.formatters[j], [value, item, i], value);
+                    that.header.formatters[j], [value_, item, i], value_);
 
                 if (item['_' + field + '_data'] && !$.isEmptyObject(item['_' + field + '_data'])) {
                     $.each(item['_' + field + '_data'], function (k, v) {
@@ -1736,7 +1737,7 @@
                         sprintf(' type="%s"', type) +
                         sprintf(' value="%s"', item[that.options.idField]) +
                         sprintf(' checked="%s"', value === true ||
-                        (value && value.checked) ? 'checked' : undefined) +
+                        (value_ || value && value.checked) ? 'checked' : undefined) +
                         sprintf(' disabled="%s"', !column.checkboxEnabled ||
                         (value && value.disabled) ? 'disabled' : undefined) +
                         ' />',

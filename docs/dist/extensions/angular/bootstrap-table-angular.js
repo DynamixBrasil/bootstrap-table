@@ -5,7 +5,7 @@
   }
   angular.module('bsTable', [])
     .constant('uiBsTables', {bsTables: {}})
-    .directive('bsTableControl', ['uiBsTables', function (uiBsTables) {
+    .directive('bsTableControl', ['uiBsTables', '$compile', function (uiBsTables, $compile) {
     var CONTAINER_SELECTOR = '.bootstrap-table';
     var SCROLLABLE_SELECTOR = '.fixed-table-body';
     var SEARCH_SELECTOR = '.search input';

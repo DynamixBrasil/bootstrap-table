@@ -86,6 +86,13 @@
           if (!options) options = $s.bsTableControl.options = {};
           var state = $s.bsTableControl.state || {};
 
+          // Force angular to compile the element content after post body
+          var onPostBodyFn = options.onPostBody;
+          options.onPostBody = function() {
+              $compile($el.contents())($s);
+              if (onPostBodyFn) onPostBodyFn();
+          };
+
           if ($s.instantiated) $el.bootstrapTable('destroy');
           $el.bootstrapTable(angular.extend(angular.copy(options), state));
           $s.instantiated = true;
@@ -103,5 +110,5 @@
         });
       }
     };
-  }])
+  }]);
 })();
